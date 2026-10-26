@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ORBITAL | Watchlist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="brand-mark" aria-hidden="true"><span class="brand-orbit"></span></span>
+    <div class="brand-text">
+      <h1 class="brand-name">ORBITAL</h1>
+      <p class="brand-sub">Mission Control Dashboard</p>
+    </div>
+  </a>
+
+  <nav class="main-nav" aria-label="Main">
+    <a href="index.html"><span class="nav-code">01</span> Dashboard</a>
+    <a href="launches.html"><span class="nav-code">02</span> Launches</a>
+    <a href="asteroids.html"><span class="nav-code">03</span> Asteroids</a>
+    <a href="watchlist.html" class="active" aria-current="page"><span class="nav-code">04</span> Watchlist</a>
+  </nav>
+
+  <div class="header-status">
+    <span class="status-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
+    <span class="utc-clock">09/24/2026 14:00 UTC</span>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-group">
+      <span>Saved events <strong>3</strong></span>
+      <span>Next up <strong>Falcon 9 / 11/02</strong></span>
+      <span>Hazard alert <strong>(2019 PD2) / 10/30</strong></span>
+      <span>ISS pass <strong>Elon, NC / 10/31 7:42 PM</strong></span>
+    </div>
+    <div class="ticker-group">
+      <span>Saved events <strong>3</strong></span>
+      <span>Next up <strong>Falcon 9 / 11/02</strong></span>
+      <span>Hazard alert <strong>(2019 PD2) / 10/30</strong></span>
+      <span>ISS pass <strong>Elon, NC / 10/31 7:42 PM</strong></span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="page-intro">
+    <p class="eyebrow">// Sector 04 / Personal log</p>
+    <h2 class="page-title">My <span>Watchlist</span></h2>
+    <p class="page-lede">Events you have saved will show up here. Add a note or remove anything you no longer care about.</p>
+  </section>
+
+  <ol class="timeline" id="watchlist">
+
+    <li class="watch-item" id="watch-add">
+      <div class="watch-add">
+        <p>Want to track more? Save events from the launch manifest or the asteroid list.</p>
+        <div class="watch-links">
+          <a class="btn-ghost" href="launches.html">Launches</a>
+          <a class="btn-ghost" href="asteroids.html">Asteroids</a>
+        </div>
+      </div>
+    </li>
+
+  </ol>
+</main>
+
+<footer class="site-footer">
+  <p><span class="footer-brand">ORBITAL</span>Mission Control Dashboard</p>
+  <p>Planned feeds: NASA APOD / NASA NeoWs / Launch Library 2 / ISS tracking</p>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/watchlist.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ORBITAL | Command Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="brand-mark" aria-hidden="true"><span class="brand-orbit"></span></span>
+    <div class="brand-text">
+      <h1 class="brand-name">ORBITAL</h1>
+      <p class="brand-sub">Mission Control Dashboard</p>
+    </div>
+  </a>
+
+  <nav class="main-nav" aria-label="Main">
+    <a href="index.html" class="active" aria-current="page"><span class="nav-code">01</span> Dashboard</a>
+    <a href="launches.html"><span class="nav-code">02</span> Launches</a>
+    <a href="asteroids.html"><span class="nav-code">03</span> Asteroids</a>
+    <a href="watchlist.html"><span class="nav-code">04</span> Watchlist</a>
+  </nav>
+
+  <div class="header-status">
+    <span class="status-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
+    <span class="utc-clock">09/24/2026 14:00 UTC</span>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-group">
+      <span>Falcon 9 <strong>T-02:14:36</strong></span>
+      <span>ISS altitude <strong>418 km</strong></span>
+      <span>ISS speed <strong>27,580 km/h</strong></span>
+      <span>Kp index <strong>3</strong></span>
+      <span>Solar flare <strong>M1.2</strong></span>
+      <span>Closest NEO <strong>2026 RK4 / 3.2M km</strong></span>
+      <span>Next ISS pass <strong>10/31 7:42 PM EDT</strong></span>
+    </div>
+    <div class="ticker-group">
+      <span>Falcon 9 <strong>T-02:14:36</strong></span>
+      <span>ISS altitude <strong>418 km</strong></span>
+      <span>ISS speed <strong>27,580 km/h</strong></span>
+      <span>Kp index <strong>3</strong></span>
+      <span>Solar flare <strong>M1.2</strong></span>
+      <span>Closest NEO <strong>2026 RK4 / 3.2M km</strong></span>
+      <span>Next ISS pass <strong>10/31 7:42 PM EDT</strong></span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="page-intro">
+    <p class="eyebrow">// Sector 01 / Command</p>
+    <h2 class="page-title">Command <span>Center</span></h2>
+    <p class="page-lede">Everything happening above us in one view: the next launch, where the ISS is right now, what is flying past Earth, and how the Sun is behaving.</p>
+  </section>
+
+  <div class="dashboard-grid">
+
+    <!-- next launch -->
+    <section class="panel panel-launch">
+      <div class="panel-head">
+        <h3>Next Launch</h3>
+        <span class="panel-tag">Launch feed</span>
+      </div>
+      <p class="mission-name" id="launch-name">Loading...</p>
+      <p class="mission-meta" id="launch-meta"></p>
+
+      <div class="countdown" id="countdown">
+        <span class="cd-prefix">T-</span>
+        <div class="cd-unit"><span class="cd-num" id="cd-days">00</span><span class="cd-label">Days</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cd-hours">00</span><span class="cd-label">Hrs</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cd-mins">00</span><span class="cd-label">Min</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cd-secs">00</span><span class="cd-label">Sec</span></div>
+      </div>
+
+      <ol class="stage-track" id="stage-track"></ol>
+
+      <p class="launch-status" id="launch-status"></p>
+    </section>
+
+    <!-- ISS location -->
+    <section class="panel panel-iss">
+      <div class="panel-head">
+        <h3>ISS Location</h3>
+        <span class="panel-tag">Tracking</span>
+      </div>
+      <div class="radar" aria-hidden="true">
+        <span class="radar-sweep"></span>
+        <span class="radar-blip"></span>
+      </div>
+      <dl class="readout" id="iss-readout"></dl>
+    </section>
+
+    <!-- near-earth asteroids -->
+    <section class="panel panel-neo">
+      <div class="panel-head">
+        <h3>Near-Earth Asteroids Today</h3>
+        <span class="panel-tag">NEO watch</span>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table table-cards">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Miss Distance</th>
+              <th>Proximity</th>
+              <th>Hazard</th>
+            </tr>
+          </thead>
+          <tbody id="neo-table-body"></tbody>
+        </table>
+      </div>
+      <p class="panel-foot">Proximity bar: the fuller it is, the closer the pass.</p>
+    </section>
+
+    <!-- space weather -->
+    <section class="panel panel-weather">
+      <div class="panel-head">
+        <h3>Space Weather</h3>
+        <span class="panel-tag">Solar</span>
+      </div>
+      <div class="gauge" id="kp-gauge" style="--value: 0">
+        <div class="gauge-readout">
+          <span class="gauge-num" id="kp-num">-</span>
+          <span class="gauge-label">Kp index</span>
+        </div>
+      </div>
+      <ul class="stat-list" id="weather-list"></ul>
+      <p class="panel-foot" id="weather-updated"></p>
+    </section>
+
+    <!-- astronomy picture of the day -->
+    <section class="panel panel-apod">
+      <div class="panel-head">
+        <h3>Astronomy Picture of the Day</h3>
+        <span class="panel-tag">NASA APOD</span>
+      </div>
+      <div class="apod-layout">
+        <figure class="apod-frame">
+          <img class="apod-image" id="apod-image" src="" alt="">
+          <figcaption id="apod-caption"></figcaption>
+        </figure>
+        <div class="apod-copy">
+          <p class="apod-date" id="apod-date"></p>
+          <h4 class="apod-title" id="apod-title"></h4>
+          <p id="apod-text"></p>
+          <p class="note">Mock data for now, NASA APOD API comes next.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p><span class="footer-brand">ORBITAL</span>Mission Control Dashboard</p>
+  <p>Planned feeds: NASA APOD / NASA NeoWs / Launch Library 2 / ISS tracking</p>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

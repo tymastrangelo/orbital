@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ORBITAL | Asteroids</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="brand-mark" aria-hidden="true"><span class="brand-orbit"></span></span>
+    <div class="brand-text">
+      <h1 class="brand-name">ORBITAL</h1>
+      <p class="brand-sub">Mission Control Dashboard</p>
+    </div>
+  </a>
+
+  <nav class="main-nav" aria-label="Main">
+    <a href="index.html"><span class="nav-code">01</span> Dashboard</a>
+    <a href="launches.html"><span class="nav-code">02</span> Launches</a>
+    <a href="asteroids.html" class="active" aria-current="page"><span class="nav-code">03</span> Asteroids</a>
+    <a href="watchlist.html"><span class="nav-code">04</span> Watchlist</a>
+  </nav>
+
+  <div class="header-status">
+    <span class="status-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
+    <span class="utc-clock">09/24/2026 14:00 UTC</span>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-group">
+      <span>Objects tracked <strong>3</strong></span>
+      <span>Potentially hazardous <strong>1</strong></span>
+      <span>Closest pass <strong>2026 RK4 / 3.2M km</strong></span>
+      <span>Fastest <strong>(2019 PD2) / 71,900 km/h</strong></span>
+      <span>Largest <strong>(2019 PD2) / up to 470 m</strong></span>
+    </div>
+    <div class="ticker-group">
+      <span>Objects tracked <strong>3</strong></span>
+      <span>Potentially hazardous <strong>1</strong></span>
+      <span>Closest pass <strong>2026 RK4 / 3.2M km</strong></span>
+      <span>Fastest <strong>(2019 PD2) / 71,900 km/h</strong></span>
+      <span>Largest <strong>(2019 PD2) / up to 470 m</strong></span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="page-intro">
+    <p class="eyebrow">// Sector 03 / Planetary defense</p>
+    <h2 class="page-title">Near-Earth <span>Asteroids</span></h2>
+    <p class="page-lede">Rocks making close passes this week, how big they are, how fast they are moving, and whether they are flagged as hazardous.</p>
+  </section>
+
+  <div class="toolbar">
+    <div class="search-bar">
+      <input type="text" id="neo-search" placeholder="Search asteroid name..." aria-label="Search asteroids">
+      <button type="button" id="neo-search-btn">Search</button>
+    </div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-num" id="stat-tracked">0</span><span class="stat-label">Objects tracked</span></div>
+    <div class="stat stat-warn"><span class="stat-num" id="stat-hazard">0</span><span class="stat-label">Hazardous</span></div>
+    <div class="stat stat-good"><span class="stat-num" id="stat-closest">-</span><span class="stat-label">Closest pass (km)</span></div>
+  </div>
+
+  <div class="neo-grid" id="neo-grid"></div>
+</main>
+
+<footer class="site-footer">
+  <p><span class="footer-brand">ORBITAL</span>Mission Control Dashboard</p>
+  <p>Planned feeds: NASA APOD / NASA NeoWs / Launch Library 2 / ISS tracking</p>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/asteroids.js"></script>
+
+</body>
+</html>

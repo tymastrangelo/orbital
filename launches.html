@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ORBITAL | Launches</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="brand-mark" aria-hidden="true"><span class="brand-orbit"></span></span>
+    <div class="brand-text">
+      <h1 class="brand-name">ORBITAL</h1>
+      <p class="brand-sub">Mission Control Dashboard</p>
+    </div>
+  </a>
+
+  <nav class="main-nav" aria-label="Main">
+    <a href="index.html"><span class="nav-code">01</span> Dashboard</a>
+    <a href="launches.html" class="active" aria-current="page"><span class="nav-code">02</span> Launches</a>
+    <a href="asteroids.html"><span class="nav-code">03</span> Asteroids</a>
+    <a href="watchlist.html"><span class="nav-code">04</span> Watchlist</a>
+  </nav>
+
+  <div class="header-status">
+    <span class="status-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
+    <span class="utc-clock">09/24/2026 14:00 UTC</span>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-group">
+      <span>Falcon 9 <strong>T-02:14:36</strong></span>
+      <span>Electron <strong>Window TBD</strong></span>
+      <span>Vulcan Centaur <strong>Delayed</strong></span>
+      <span>Launches this week <strong>3</strong></span>
+      <span>ISS altitude <strong>418 km</strong></span>
+      <span>Kp index <strong>3</strong></span>
+    </div>
+    <div class="ticker-group">
+      <span>Falcon 9 <strong>T-02:14:36</strong></span>
+      <span>Electron <strong>Window TBD</strong></span>
+      <span>Vulcan Centaur <strong>Delayed</strong></span>
+      <span>Launches this week <strong>3</strong></span>
+      <span>ISS altitude <strong>418 km</strong></span>
+      <span>Kp index <strong>3</strong></span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="page-intro">
+    <p class="eyebrow">// Sector 02 / Launch manifest</p>
+    <h2 class="page-title">Upcoming <span>Launches</span></h2>
+    <p class="page-lede">Every scheduled liftoff on the board, who is flying it, and whether it is cleared to go.</p>
+  </section>
+
+  <div class="toolbar">
+    <div class="search-bar">
+      <input type="text" id="launch-search" placeholder="Search by rocket or provider..." aria-label="Search launches">
+      <button type="button" id="search-btn">Search</button>
+    </div>
+    <div class="chip-row" id="provider-chips"></div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-num" id="stat-total">0</span><span class="stat-label">Scheduled</span></div>
+    <div class="stat stat-good"><span class="stat-num" id="stat-go">0</span><span class="stat-label">Go</span></div>
+    <div class="stat stat-warn"><span class="stat-num" id="stat-tbd">0</span><span class="stat-label">TBD</span></div>
+    <div class="stat stat-bad"><span class="stat-num" id="stat-delayed">0</span><span class="stat-label">Delayed</span></div>
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h3>Launch Manifest</h3>
+      <span class="panel-tag">Next 3 weeks</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table table-cards">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Rocket</th>
+            <th>Mission</th>
+            <th>Provider</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="launch-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p><span class="footer-brand">ORBITAL</span>Mission Control Dashboard</p>
+  <p>Planned feeds: NASA APOD / NASA NeoWs / Launch Library 2 / ISS tracking</p>
+</footer>
+
+<script src="js/mock-data.js"></script>
+<script src="js/common.js"></script>
+<script src="js/launches.js"></script>
+
+</body>
+</html>
