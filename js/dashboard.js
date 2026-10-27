@@ -9,7 +9,7 @@ let nextLaunch;
 function findNextLaunch(launches) {
     let soonest = launches[0];
     for (let i = 1; i < launches.length; i++) {
-        if (new Date(launches[i].launch_date) < new Date(soonest.launch_date)) {
+        if (new Date(launches[i].launchDate) < new Date(soonest.launchDate)) {
             soonest = launches[i];
         }
     }
@@ -17,7 +17,7 @@ function findNextLaunch(launches) {
 }
 
 function showNextLaunch() {
-    nextLaunch = findNextLaunch(launchesResponse.launches);
+    nextLaunch = findNextLaunch(launchList);
 
     document.getElementById("launch-name").innerHTML = nextLaunch.rocket + " <span>|</span> " + nextLaunch.mission;
     document.getElementById("launch-meta").textContent = nextLaunch.provider + " / " + nextLaunch.location;
@@ -26,9 +26,9 @@ function showNextLaunch() {
     let stagesHtml = "";
     for (let i = 0; i < stageNames.length; i++) {
         let cls = "";
-        if (i < nextLaunch.current_stage) {
+        if (i < nextLaunch.currentStage) {
             cls = "done";
-        } else if (i === nextLaunch.current_stage) {
+        } else if (i === nextLaunch.currentStage) {
             cls = "current";
         }
         stagesHtml += '<li class="' + cls + '">' + stageNames[i] + '</li>';
@@ -40,7 +40,7 @@ function showNextLaunch() {
 }
 
 function updateCountdown() {
-    let msLeft = new Date(nextLaunch.launch_date) - new Date();
+    let msLeft = new Date(nextLaunch.launchDate) - new Date();
     if (msLeft < 0) {
         msLeft = 0;
     }
@@ -63,12 +63,12 @@ function updateCountdown() {
 
 // ---- ISS ----
 function showIss() {
-    let iss = issResponse;
+    let iss = issLocation;
     document.getElementById("iss-readout").innerHTML = `
         <div><dt>Latitude</dt><dd>${iss.latitude.toFixed(4)}</dd></div>
         <div><dt>Longitude</dt><dd>${iss.longitude.toFixed(4)}</dd></div>
-        <div><dt>Altitude</dt><dd>${iss.altitude_km} <small>km</small></dd></div>
-        <div><dt>Speed</dt><dd>${iss.speed_kmh.toLocaleString()} <small>km/h</small></dd></div>
+        <div><dt>Altitude</dt><dd>${iss.altitudeKm} <small>km</small></dd></div>
+        <div><dt>Speed</dt><dd>${iss.speedKmh.toLocaleString()} <small>km/h</small></dd></div>
         <div class="wide"><dt>Currently over</dt><dd>${iss.over}</dd></div>
     `;
 }
@@ -79,13 +79,13 @@ function showAsteroids() {
     let tbody = document.getElementById("neo-table-body");
     tbody.innerHTML = "";
 
-    asteroidsResponse.asteroids.forEach(function (rock) {
+    asteroidList.forEach(function (rock) {
         let meterClass = rock.hazardous ? "meter meter-warn" : "meter";
         let row = document.createElement("tr");
         row.innerHTML = `
             <td class="obj-name" data-label="Name">${rock.name}</td>
-            <td data-label="Miss Distance">${(rock.miss_distance_km / 1000000).toFixed(1)} million km</td>
-            <td data-label="Proximity"><span class="${meterClass}" style="--fill: ${proximityPercent(rock.miss_distance_km)}%"></span></td>
+            <td data-label="Miss Distance">${(rock.missDistanceKm / 1000000).toFixed(1)} million km</td>
+            <td data-label="Proximity"><span class="${meterClass}" style="--fill: ${proximityPercent(rock.missDistanceKm)}%"></span></td>
             <td data-label="Hazard">${hazardBadge(rock.hazardous, false)}</td>
         `;
         tbody.appendChild(row);
@@ -95,22 +95,22 @@ function showAsteroids() {
 
 // ---- space weather ----
 function showWeather() {
-    let w = weatherResponse;
+    let w = spaceWeather;
 
     let gauge = document.getElementById("kp-gauge");
-    gauge.style.setProperty("--value", w.kp_index);
-    document.getElementById("kp-num").innerHTML = w.kp_index + "<small>/9</small>";
+    gauge.style.setProperty("--value", w.kpIndex);
+    document.getElementById("kp-num").innerHTML = w.kpIndex + "<small>/9</small>";
 
     // M and X class flares are the big ones
     let flareStatus = "status-good";
-    if (w.flare_class.startsWith("M") || w.flare_class.startsWith("X")) {
+    if (w.flareClass.startsWith("M") || w.flareClass.startsWith("X")) {
         flareStatus = "status-warn";
     }
-    let stormStatus = w.storm_level === "None" ? "status-good" : "status-bad";
+    let stormStatus = w.stormLevel === "None" ? "status-good" : "status-bad";
 
     document.getElementById("weather-list").innerHTML = `
-        <li><span>Solar flare</span><span class="badge ${flareStatus}">${w.flare_class} Class</span></li>
-        <li><span>Geomagnetic storm</span><span class="badge ${stormStatus}">${w.storm_level}</span></li>
+        <li><span>Solar flare</span><span class="badge ${flareStatus}">${w.flareClass} Class</span></li>
+        <li><span>Geomagnetic storm</span><span class="badge ${stormStatus}">${w.stormLevel}</span></li>
     `;
 
     let updated = new Date(w.updated);
@@ -121,9 +121,9 @@ function showWeather() {
 
 // ---- APOD ----
 function showApod() {
-    let a = apodResponse;
+    let a = apod;
     let img = document.getElementById("apod-image");
-    img.src = a.image_url;
+    img.src = a.imageUrl;
     img.alt = a.title;
     document.getElementById("apod-caption").textContent = a.caption;
     document.getElementById("apod-date").textContent = "Image for " + formatDate(a.date);

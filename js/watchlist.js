@@ -1,11 +1,11 @@
 // Watchlist page (watchlist.html)
 // this is the page that uses all of CRUD:
-//   GET    /api/watchlist       load the list
-//   POST   /api/watchlist       add (done from the launches page)
-//   PUT    /api/watchlist/:id   edit the note on an item
-//   DELETE /api/watchlist/:id   remove an item
+//   GET    /watchitems          load the list
+//   POST   /watchitem           add (done from the launches page)
+//   PUT    /watchitem/:id       edit the note on an item
+//   DELETE /watchitem/:id       remove an item
 
-let watchItems = watchlistResponse.items;
+let watchItems = watchItemList;
 
 
 function showWatchlist() {
@@ -46,9 +46,9 @@ function showWatchlist() {
                     ${item.note ? '<p class="watch-note">Note: ' + item.note + '</p>' : ""}
                 </div>
                 <div class="watch-actions">
-                    <span class="badge status-${item.badge_status}">${item.badge}</span>
-                    <button type="button" class="btn-ghost" onclick="editNote(${item.id})">Note</button>
-                    <button type="button" class="btn-ghost btn-remove" onclick="removeItem(${item.id})">Remove</button>
+                    <span class="badge status-${item.badgeStatus}">${item.badge}</span>
+                    <button type="button" class="btn-ghost" onclick="editNote(${item.watchItemId})">Note</button>
+                    <button type="button" class="btn-ghost btn-remove" onclick="removeItem(${item.watchItemId})">Remove</button>
                 </div>
             </div>
         `;
@@ -57,10 +57,10 @@ function showWatchlist() {
 }
 
 
-// PUT /api/watchlist/:id
+// PUT /watchitem/:id
 function editNote(id) {
     let item = watchItems.find(function (w) {
-        return w.id === id;
+        return w.watchItemId === id;
     });
 
     let newNote = prompt("Note for " + item.title + ":", item.note);
@@ -69,17 +69,17 @@ function editNote(id) {
     }
 
     item.note = newNote.trim();
-    console.log("PUT /api/watchlist/" + id, { note: item.note });
+    console.log("PUT /watchitem/" + id, item);
     showWatchlist();
 }
 
 
-// DELETE /api/watchlist/:id
+// DELETE /watchitem/:id
 function removeItem(id) {
     watchItems = watchItems.filter(function (w) {
-        return w.id !== id;
+        return w.watchItemId !== id;
     });
-    console.log("DELETE /api/watchlist/" + id);
+    console.log("DELETE /watchitem/" + id);
     showWatchlist();
 }
 

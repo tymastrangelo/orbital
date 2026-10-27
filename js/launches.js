@@ -1,6 +1,6 @@
 // Launches page (launches.html)
 
-let launches = launchesResponse.launches;
+let launches = launchList;
 let activeProvider = "All";
 let savedIds = [];
 
@@ -75,18 +75,18 @@ function showTable() {
             return;
         }
 
-        let saved = savedIds.includes(launch.id);
+        let saved = savedIds.includes(launch.launchId);
 
         let row = document.createElement("tr");
         row.innerHTML = `
-            <td data-label="Date">${formatDate(launch.launch_date)}</td>
+            <td data-label="Date">${formatDate(launch.launchDate)}</td>
             <td class="obj-name" data-label="Rocket">${launch.rocket}</td>
             <td data-label="Mission">${launch.mission}</td>
             <td data-label="Provider">${launch.provider}</td>
             <td data-label="Location">${launch.location}</td>
             <td data-label="Status">${launchBadge(launch.status)}</td>
             <td data-label="Watch">
-                <button type="button" class="btn-ghost" onclick="saveLaunch(${launch.id}, this)" ${saved ? "disabled" : ""}>${saved ? "Saved" : "+ Watch"}</button>
+                <button type="button" class="btn-ghost" onclick="saveLaunch(${launch.launchId}, this)" ${saved ? "disabled" : ""}>${saved ? "Saved" : "+ Watch"}</button>
             </td>
         `;
         tbody.appendChild(row);
@@ -99,17 +99,34 @@ function showTable() {
 }
 
 
-// this will be POST /api/watchlist once the backend exists
+// this will be POST /watchitem once the backend exists
+// no watchItemId in the body, the backend makes that (same as createStudent)
 function saveLaunch(id, button) {
     let launch = launches.find(function (l) {
-        return l.id === id;
+        return l.launchId === id;
     });
+
+    let badge = "TBD";
+    let badgeStatus = "warn";
+    if (launch.status === "go") {
+        badge = "Go";
+        badgeStatus = "good";
+    } else if (launch.status === "delayed") {
+        badge = "Delayed";
+        badgeStatus = "bad";
+    }
 
     let body = {
         type: "launch",
-        ref_id: launch.id
+        refId: launch.launchId,
+        title: launch.rocket + " | " + launch.mission,
+        date: launch.launchDate.substring(0, 10),
+        detail: launch.location,
+        badge: badge,
+        badgeStatus: badgeStatus,
+        note: ""
     };
-    console.log("POST /api/watchlist", body);
+    console.log("POST /watchitem", body);
 
     savedIds.push(id);
     button.textContent = "Saved";
