@@ -6,7 +6,7 @@
   <title>ORBITAL | Launches</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
     <span class="brand-mark" aria-hidden="true"><span class="brand-orbit"></span></span>
     <div class="brand-text">
       <h1 class="brand-name">ORBITAL</h1>
-      <p class="brand-sub">Mission Control Dashboard</p>
+      <p class="brand-sub">Flight software v2.0</p>
     </div>
   </a>
 
@@ -28,42 +28,50 @@
   </nav>
 
   <div class="header-status">
-    <span class="status-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
-    <span class="utc-clock">09/24/2026 14:00 UTC</span>
+    <div class="feed-leds" aria-label="Data feed status">
+      <span class="feed"><i class="led" data-feed="launches"></i>LL2</span>
+      <span class="feed"><i class="led" data-feed="nasa"></i>NASA</span>
+      <span class="feed"><i class="led" data-feed="iss"></i>ISS</span>
+      <span class="feed"><i class="led" data-feed="swpc"></i>SWPC</span>
+    </div>
+    <span class="status-pill" id="systems-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
+    <button type="button" class="sound-toggle" id="sound-toggle" aria-pressed="false" title="UI sounds"><span>SND OFF</span></button>
   </div>
 </header>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <div class="ticker-group">
-      <span>Falcon 9 <strong>T-02:14:36</strong></span>
-      <span>Electron <strong>Window TBD</strong></span>
-      <span>Vulcan Centaur <strong>Delayed</strong></span>
-      <span>Launches this week <strong>3</strong></span>
-      <span>ISS altitude <strong>418 km</strong></span>
-      <span>Kp index <strong>3</strong></span>
-    </div>
-    <div class="ticker-group">
-      <span>Falcon 9 <strong>T-02:14:36</strong></span>
-      <span>Electron <strong>Window TBD</strong></span>
-      <span>Vulcan Centaur <strong>Delayed</strong></span>
-      <span>Launches this week <strong>3</strong></span>
-      <span>ISS altitude <strong>418 km</strong></span>
-      <span>Kp index <strong>3</strong></span>
-    </div>
+<div class="clock-bar">
+  <div class="clock">
+    <span class="clock-label">UTC</span>
+    <span class="clock-val" id="clock-utc">00:00:00</span>
+    <span class="clock-sub" id="clock-date">0000.00.00</span>
+  </div>
+  <div class="clock">
+    <span class="clock-label">MET</span>
+    <span class="clock-val" id="clock-met">+00:00:00:00</span>
+    <span class="clock-sub">mission elapsed</span>
+  </div>
+  <div class="clock">
+    <span class="clock-label">SOL</span>
+    <span class="clock-val" id="clock-sol">0</span>
+    <span class="clock-sub">Perseverance / Jezero</span>
+  </div>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track"></div>
   </div>
 </div>
 
 <main>
   <section class="page-intro">
-    <p class="eyebrow">// Sector 02 / Launch manifest</p>
-    <h2 class="page-title">Upcoming <span>Launches</span></h2>
-    <p class="page-lede">Every scheduled liftoff on the board, who is flying it, and whether it is cleared to go.</p>
+    <div>
+      <p class="eyebrow">// Sector 02 / Launch manifest</p>
+      <h2 class="page-title">Upcoming <span>Launches</span></h2>
+    </div>
+    <p class="page-lede">Every scheduled liftoff on the board worldwide, who is flying it, where from, and whether it is cleared to go. Click a row for the mission brief.</p>
   </section>
 
   <div class="toolbar">
     <div class="search-bar">
-      <input type="text" id="launch-search" placeholder="Search by rocket or provider..." aria-label="Search launches">
+      <input type="text" id="launch-search" placeholder="Search rocket, mission, provider, pad..." aria-label="Search launches">
       <button type="button" id="search-btn">Search</button>
     </div>
     <div class="chip-row" id="provider-chips"></div>
@@ -72,41 +80,73 @@
   <div class="stat-strip">
     <div class="stat"><span class="stat-num" id="stat-total">0</span><span class="stat-label">Scheduled</span></div>
     <div class="stat stat-good"><span class="stat-num" id="stat-go">0</span><span class="stat-label">Go</span></div>
-    <div class="stat stat-warn"><span class="stat-num" id="stat-tbd">0</span><span class="stat-label">TBD</span></div>
-    <div class="stat stat-bad"><span class="stat-num" id="stat-delayed">0</span><span class="stat-label">Delayed</span></div>
+    <div class="stat stat-warn"><span class="stat-num" id="stat-tbd">0</span><span class="stat-label">TBD / TBC</span></div>
+    <div class="stat stat-bad"><span class="stat-num" id="stat-delayed">0</span><span class="stat-label">Hold</span></div>
+    <div class="stat"><span class="stat-num" id="stat-week">0</span><span class="stat-label">Next 7 days</span></div>
   </div>
 
-  <section class="panel">
-    <div class="panel-head">
-      <h3>Launch Manifest</h3>
-      <span class="panel-tag">Next 3 weeks</span>
+  <div class="launch-layout">
+    <div class="launch-left">
+      <section class="panel">
+        <div class="panel-head">
+          <h3><span class="mod-code">MOD 02</span>Launch Manifest</h3>
+          <span class="panel-tag" id="manifest-tag">Loading</span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table table-cards table-click">
+            <thead>
+              <tr>
+                <th>NET</th>
+                <th>T-</th>
+                <th>Rocket</th>
+                <th>Mission</th>
+                <th>Provider</th>
+                <th>Site</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="launch-table-body"></tbody>
+          </table>
+        </div>
+      </section>
     </div>
-    <div class="table-wrap">
-      <table class="data-table table-cards">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Rocket</th>
-            <th>Mission</th>
-            <th>Provider</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="launch-table-body"></tbody>
-      </table>
-    </div>
-  </section>
+
+    <aside class="launch-right">
+      <section class="panel panel-sites">
+        <div class="panel-head">
+          <h3><span class="mod-code">MOD 07</span>Launch Sites</h3>
+          <span class="panel-tag">Pads in use</span>
+        </div>
+        <div class="map-frame map-small">
+          <canvas class="world-map" id="pad-map"></canvas>
+        </div>
+        <p class="panel-foot" id="pad-foot"></p>
+      </section>
+
+      <section class="panel panel-detail" id="launch-detail">
+        <div class="panel-head">
+          <h3><span class="mod-code">MOD 08</span>Mission Brief</h3>
+          <span class="panel-tag">Select a launch</span>
+        </div>
+        <div class="detail-body" id="detail-body">
+          <p class="note">Click any launch in the manifest to read its brief, see the pad, and open the webcast.</p>
+        </div>
+      </section>
+    </aside>
+  </div>
 </main>
 
 <footer class="site-footer">
   <p><span class="footer-brand">ORBITAL</span>Mission Control Dashboard</p>
-  <p>Planned feeds: NASA APOD / NASA NeoWs / Launch Library 2 / ISS tracking</p>
+  <p>Feeds: Launch Library 2 / wheretheiss.at / NASA APOD + NeoWs / NOAA SWPC</p>
 </footer>
 
 <script src="js/mock-data.js"></script>
 <script src="js/common.js"></script>
+<script src="js/api.js"></script>
+<script src="js/world-dots.js"></script>
+<script src="js/worldmap.js"></script>
 <script src="js/launches.js"></script>
 
 </body>

@@ -6,7 +6,7 @@
   <title>ORBITAL | Asteroids</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
     <span class="brand-mark" aria-hidden="true"><span class="brand-orbit"></span></span>
     <div class="brand-text">
       <h1 class="brand-name">ORBITAL</h1>
-      <p class="brand-sub">Mission Control Dashboard</p>
+      <p class="brand-sub">Flight software v2.0</p>
     </div>
   </a>
 
@@ -28,35 +28,45 @@
   </nav>
 
   <div class="header-status">
-    <span class="status-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
-    <span class="utc-clock">09/24/2026 14:00 UTC</span>
+    <div class="feed-leds" aria-label="Data feed status">
+      <span class="feed"><i class="led" data-feed="launches"></i>LL2</span>
+      <span class="feed"><i class="led" data-feed="nasa"></i>NASA</span>
+      <span class="feed"><i class="led" data-feed="iss"></i>ISS</span>
+      <span class="feed"><i class="led" data-feed="swpc"></i>SWPC</span>
+    </div>
+    <span class="status-pill" id="systems-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
+    <button type="button" class="sound-toggle" id="sound-toggle" aria-pressed="false" title="UI sounds"><span>SND OFF</span></button>
   </div>
 </header>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <div class="ticker-group">
-      <span>Objects tracked <strong>3</strong></span>
-      <span>Potentially hazardous <strong>1</strong></span>
-      <span>Closest pass <strong>2026 RK4 / 3.2M km</strong></span>
-      <span>Fastest <strong>(2019 PD2) / 71,900 km/h</strong></span>
-      <span>Largest <strong>(2019 PD2) / up to 470 m</strong></span>
-    </div>
-    <div class="ticker-group">
-      <span>Objects tracked <strong>3</strong></span>
-      <span>Potentially hazardous <strong>1</strong></span>
-      <span>Closest pass <strong>2026 RK4 / 3.2M km</strong></span>
-      <span>Fastest <strong>(2019 PD2) / 71,900 km/h</strong></span>
-      <span>Largest <strong>(2019 PD2) / up to 470 m</strong></span>
-    </div>
+<div class="clock-bar">
+  <div class="clock">
+    <span class="clock-label">UTC</span>
+    <span class="clock-val" id="clock-utc">00:00:00</span>
+    <span class="clock-sub" id="clock-date">0000.00.00</span>
+  </div>
+  <div class="clock">
+    <span class="clock-label">MET</span>
+    <span class="clock-val" id="clock-met">+00:00:00:00</span>
+    <span class="clock-sub">mission elapsed</span>
+  </div>
+  <div class="clock">
+    <span class="clock-label">SOL</span>
+    <span class="clock-val" id="clock-sol">0</span>
+    <span class="clock-sub">Perseverance / Jezero</span>
+  </div>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track"></div>
   </div>
 </div>
 
 <main>
   <section class="page-intro">
-    <p class="eyebrow">// Sector 03 / Planetary defense</p>
-    <h2 class="page-title">Near-Earth <span>Asteroids</span></h2>
-    <p class="page-lede">Rocks making close passes this week, how big they are, how fast they are moving, and whether they are flagged as hazardous.</p>
+    <div>
+      <p class="eyebrow">// Sector 03 / Planetary defense</p>
+      <h2 class="page-title">Near-Earth <span>Objects</span></h2>
+    </div>
+    <p class="page-lede">Every rock NASA has on the books passing Earth in the next seven days: how close, how big, how fast, and whether it is flagged as potentially hazardous.</p>
   </section>
 
   <div class="toolbar">
@@ -64,24 +74,45 @@
       <input type="text" id="neo-search" placeholder="Search asteroid name..." aria-label="Search asteroids">
       <button type="button" id="neo-search-btn">Search</button>
     </div>
+    <div class="chip-row" id="neo-chips">
+      <button type="button" class="chip chip-active" data-filter="all">All</button>
+      <button type="button" class="chip" data-filter="hazard">Hazardous only</button>
+      <button type="button" class="chip" data-filter="moon">Inside the Moon's orbit</button>
+      <span class="chip-gap"></span>
+      <button type="button" class="chip chip-active" data-sort="date">Sort: date</button>
+      <button type="button" class="chip" data-sort="distance">Sort: distance</button>
+      <button type="button" class="chip" data-sort="size">Sort: size</button>
+    </div>
   </div>
 
   <div class="stat-strip">
     <div class="stat"><span class="stat-num" id="stat-tracked">0</span><span class="stat-label">Objects tracked</span></div>
-    <div class="stat stat-warn"><span class="stat-num" id="stat-hazard">0</span><span class="stat-label">Hazardous</span></div>
-    <div class="stat stat-good"><span class="stat-num" id="stat-closest">-</span><span class="stat-label">Closest pass (km)</span></div>
+    <div class="stat stat-warn"><span class="stat-num" id="stat-hazard">0</span><span class="stat-label">Potentially hazardous</span></div>
+    <div class="stat stat-good"><span class="stat-num" id="stat-closest">0</span><span class="stat-label">Closest pass (LD)</span></div>
+    <div class="stat"><span class="stat-num" id="stat-biggest">0</span><span class="stat-label">Largest (m)</span></div>
+    <div class="stat"><span class="stat-num" id="stat-fastest">0</span><span class="stat-label">Fastest (km/s)</span></div>
   </div>
 
-  <div class="neo-grid" id="neo-grid"></div>
+  <section class="panel panel-chart">
+    <div class="panel-head">
+      <h3><span class="mod-code">MOD 03</span>Approach Chart</h3>
+      <span class="panel-tag">Miss distance vs time</span>
+    </div>
+    <div class="chart-wrap" id="neo-chart"></div>
+    <p class="panel-foot">Each dot is one object at its closest approach. Dot size follows estimated diameter. Anything below the Moon line passes closer than the Moon. Hover for details.</p>
+  </section>
+
+  <div class="card-grid" id="neo-grid"></div>
 </main>
 
 <footer class="site-footer">
   <p><span class="footer-brand">ORBITAL</span>Mission Control Dashboard</p>
-  <p>Planned feeds: NASA APOD / NASA NeoWs / Launch Library 2 / ISS tracking</p>
+  <p>Feeds: Launch Library 2 / wheretheiss.at / NASA APOD + NeoWs / NOAA SWPC</p>
 </footer>
 
 <script src="js/mock-data.js"></script>
 <script src="js/common.js"></script>
+<script src="js/api.js"></script>
 <script src="js/asteroids.js"></script>
 
 </body>

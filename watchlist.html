@@ -6,7 +6,7 @@
   <title>ORBITAL | Watchlist</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
     <span class="brand-mark" aria-hidden="true"><span class="brand-orbit"></span></span>
     <div class="brand-text">
       <h1 class="brand-name">ORBITAL</h1>
-      <p class="brand-sub">Mission Control Dashboard</p>
+      <p class="brand-sub">Flight software v2.0</p>
     </div>
   </a>
 
@@ -28,40 +28,68 @@
   </nav>
 
   <div class="header-status">
-    <span class="status-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
-    <span class="utc-clock">09/24/2026 14:00 UTC</span>
+    <div class="feed-leds" aria-label="Data feed status">
+      <span class="feed"><i class="led" data-feed="launches"></i>LL2</span>
+      <span class="feed"><i class="led" data-feed="nasa"></i>NASA</span>
+      <span class="feed"><i class="led" data-feed="iss"></i>ISS</span>
+      <span class="feed"><i class="led" data-feed="swpc"></i>SWPC</span>
+    </div>
+    <span class="status-pill" id="systems-pill"><span class="live-dot"></span><span>Systems nominal</span></span>
+    <button type="button" class="sound-toggle" id="sound-toggle" aria-pressed="false" title="UI sounds"><span>SND OFF</span></button>
   </div>
 </header>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <div class="ticker-group">
-      <span>Saved events <strong>3</strong></span>
-      <span>Next up <strong>Falcon 9 / 11/02</strong></span>
-      <span>Hazard alert <strong>(2019 PD2) / 10/30</strong></span>
-      <span>ISS pass <strong>Elon, NC / 10/31 7:42 PM</strong></span>
-    </div>
-    <div class="ticker-group">
-      <span>Saved events <strong>3</strong></span>
-      <span>Next up <strong>Falcon 9 / 11/02</strong></span>
-      <span>Hazard alert <strong>(2019 PD2) / 10/30</strong></span>
-      <span>ISS pass <strong>Elon, NC / 10/31 7:42 PM</strong></span>
-    </div>
+<div class="clock-bar">
+  <div class="clock">
+    <span class="clock-label">UTC</span>
+    <span class="clock-val" id="clock-utc">00:00:00</span>
+    <span class="clock-sub" id="clock-date">0000.00.00</span>
+  </div>
+  <div class="clock">
+    <span class="clock-label">MET</span>
+    <span class="clock-val" id="clock-met">+00:00:00:00</span>
+    <span class="clock-sub">mission elapsed</span>
+  </div>
+  <div class="clock">
+    <span class="clock-label">SOL</span>
+    <span class="clock-val" id="clock-sol">0</span>
+    <span class="clock-sub">Perseverance / Jezero</span>
+  </div>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track"></div>
   </div>
 </div>
 
 <main>
   <section class="page-intro">
-    <p class="eyebrow">// Sector 04 / Personal log</p>
-    <h2 class="page-title">My <span>Watchlist</span></h2>
-    <p class="page-lede">Events you have saved will show up here. Add a note or remove anything you no longer care about.</p>
+    <div>
+      <p class="eyebrow">// Sector 04 / Personal log</p>
+      <h2 class="page-title">My <span>Watchlist</span></h2>
+    </div>
+    <p class="page-lede">Launches and flybys you have flagged, soonest first. Add a note, or drop anything you no longer care about. This is the one part of ORBITAL you own, so it gets the full create / read / update / delete set.</p>
   </section>
+
+  <div class="toolbar">
+    <div class="chip-row" id="watch-chips">
+      <button type="button" class="chip chip-active" data-type="all">All</button>
+      <button type="button" class="chip" data-type="launch">Launches</button>
+      <button type="button" class="chip" data-type="asteroid">Asteroids</button>
+      <button type="button" class="chip" data-type="iss">ISS</button>
+    </div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat"><span class="stat-num" id="stat-saved">0</span><span class="stat-label">Saved events</span></div>
+    <div class="stat stat-good"><span class="stat-num" id="stat-upcoming">0</span><span class="stat-label">Still ahead</span></div>
+    <div class="stat stat-warn"><span class="stat-num" id="stat-next">-</span><span class="stat-label">Next event in</span></div>
+    <div class="stat"><span class="stat-num" id="stat-notes">0</span><span class="stat-label">With notes</span></div>
+  </div>
 
   <ol class="timeline" id="watchlist">
 
     <li class="watch-item" id="watch-add">
       <div class="watch-add">
-        <p>Want to track more? Save events from the launch manifest or the asteroid list.</p>
+        <p>Want to track more? Flag events from the launch manifest or the asteroid list and they show up here.</p>
         <div class="watch-links">
           <a class="btn-ghost" href="launches.html">Launches</a>
           <a class="btn-ghost" href="asteroids.html">Asteroids</a>
@@ -74,11 +102,12 @@
 
 <footer class="site-footer">
   <p><span class="footer-brand">ORBITAL</span>Mission Control Dashboard</p>
-  <p>Planned feeds: NASA APOD / NASA NeoWs / Launch Library 2 / ISS tracking</p>
+  <p>Feeds: Launch Library 2 / wheretheiss.at / NASA APOD + NeoWs / NOAA SWPC</p>
 </footer>
 
 <script src="js/mock-data.js"></script>
 <script src="js/common.js"></script>
+<script src="js/api.js"></script>
 <script src="js/watchlist.js"></script>
 
 </body>
